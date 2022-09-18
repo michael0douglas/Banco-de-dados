@@ -30,7 +30,7 @@ CREATE TABLE pet(
 
 INSERT INTO cliente VALUES 
     (null, 'Ronaldo','Gaucho', '1712345678', '110987654', '08152-130', 'Rua Redonda','Campo Limpo' ),
-    (null, 'Lucas', 'Alves','12902920399', '1112345665', '12345-120', 'Rua Quadrada','Campo Sujo' ),
+    (null, 'augusto', 'Alves','12902920399', '1112345665', '12345-120', 'Rua Quadrada','Campo Sujo' ),
     (null, 'Yuri', 'Carlos','876543290', '8022939122', '09876-098', 'Rua Triangular','Quadra Lisa' );
 
 INSERT INTO pet VALUES
@@ -113,21 +113,21 @@ CREATE TABLE gasto(
 
 
 INSERT INTO pessoa VALUES 
-    (null, 'Joseph', '1966-09-10', 'Militar'),
-    (null, 'Hermelindo', '1999-12-19', 'Bombeiro'),
-    (null, 'Rosalia', '2013-02-03', 'Professor'),
-    (null, 'Vivian', '1985-10-17', 'Professor'),
+    (null, 'josias', '2000-09-10', 'Militar'),
+    (null, 'Hermelindo', '1999-12-19', 'gogoboy'),
+    (null, 'maria', '2006-02-03', 'Professor'),
+    (null, 'Vivian', '1999-10-17', 'Professor'),
     (null, 'Lucas', '1994-03-09', 'Programador'),
-    (null, 'Nilton', '2003-09-30', 'Programador');
+    (null, 'michael', '2003-09-30', 'poliça');
 
 
 INSERT INTO gasto VALUES
     (null, '2022-09-01', 180.90, 'Compra de uma bermuda', 1),
-    (null, '2020-01-01', 3800.00, 'Rolê começo do ano', 2),
-    (null, '2021-03-21', 10.10, 'Compra de bebidas', 3),
-    (null, '2019-09-01', 100.00, 'Comprade uma blusa', 4),
-    (null, '2022-08-02', 80.80, 'Compra de um café', 5),
-    (null, '2022-09-13', 1000.00, 'Compra de um notebook', 6);
+    (null, '2020-01-01', 4000.00, 'suborno', 2),
+    (null, '1999-03-21', 30.10, 'pc gaymer', 1),
+    (null, '2019-09-01', 99.00, 'Comprade uma blusa', 4),
+    (null, '2022-08-02', 80.80, 'Compra de um suco', 5),
+    (null, '2022-09-13', 200.00, 'Compra de um boneco inflavel', 9);
 
 
 SELECT * FROM pessoa 
@@ -143,12 +143,150 @@ SELECT * FROM pessoa
 SELECT * FROM pessoa 
     JOIN gasto 
         ON idPessoa = fkPessoa
-            WHERE nomePessoa = 'Nilton'; 
+            WHERE nomePessoa = 'michael'; 
 
 
-UPDATE pessoa SET profissao = 'Dentista'
+UPDATE pessoa SET profissao = 'Kleopata'
     WHERE idPessoa = 1 OR idPessoa = 5;
 
 DELETE FROM gasto 
     WHERE idGasto IN (2,4);
+    
+    -- ATIVIDADE 03
+CREATE DATABASE praticaFuncionario;
+
+USE praticaFuncionario;
+
+
+CREATE TABLE setor(
+	idSetor INT PRIMARY KEY AUTO_INCREMENT, 
+    nomeSetor VARCHAR(45), 
+    andarSetor VARCHAR(2)
+);
+
+CREATE TABLE funcionario(
+	idFuncionario INT PRIMARY KEY AUTO_INCREMENT, 
+    nomeFunc VARCHAR (45), 
+    telefoneCelular VARCHAR(20),
+    salario FLOAT, CONSTRAINT chkSalario CHECK(salario > 0), 
+    fkSetor INT, FOREIGN KEY (fkSetor) REFERENCES setor(idSetor)
+);
+
+CREATE TABLE acompanhante (
+	idAcompanhante INT AUTO_INCREMENT, 
+    nomeAcomp VARCHAR (45), 
+    parentescoAcomp VARCHAR(45),
+    dataNasc DATE, 
+    fkFuncionario INT, FOREIGN KEY (fkFuncionario) REFERENCES funcionario (idFuncionario), 
+    PRIMARY KEY(idAcompanhante, fkFuncionario)
+);
+
+INSERT INTO setor VALUES
+	(null, 'TI', '2'), 
+    (null, 'Faxina', '8'),
+    (null, 'marceneiro', '3');
+    
+INSERT INTO funcionario VALUES 
+	(null, 'Paula', '12345676455', 1.99, 1),
+    (null, 'Jaime', '88329189', 2.31, 1),
+    (null, 'vana jaima', '8377737123', 8.01, 2), 
+    (null, 'Edimilson', '838212532', 10.11, 3), 
+    (null, 'Erick', '9343884878', 2.20, 3), 
+    (null, 'Fernanda', '554121362', 5.50, 2);
+    
+INSERT INTO acompanhante VALUES 
+	(null, 'Gabriel', 'marido', '2000-10-20',1),
+    (null, 'lucas', 'filho', '2010-01-09',3), 
+    (null, 'Luisa', 'irmã', '1996-12-30', 2), 
+    (null, 'deodoro', 'filho', '1978-03-21',4), 
+    (null, 'Kevenlin', 'mãe', '1981-10-23',5), 
+    (null, 'miria', 'irmã', '2007-01-30', 1);
+    
+SELECT * FROM setor;
+SELECT * FROM funcionario;
+SELECT * FROM acompanhante;
+
+SELECT * FROM setor
+	JOIN funcionario on idSetor = fkSetor;
+    
+SELECT * FROM setor 
+	JOIN funcionario ON idSetor = fkSetor
+		WHERE nomeSetor = 'RH';
+        
+SELECT * FROM funcionario 
+	JOIN acompanhante ON idFuncionario = fkFuncionario;
+    
+SELECT * FROM funcionario 
+	JOIN setor ON idSetor = fkSetor
+		JOIN acompanhante ON idFuncionario = fkFuncionario;
+        
+---------------------------------------------------------------------------------------------------------------------
+
+
+-- ATIVIDADE 04
+
+CREATE DATABASE Treinador;
+USE Treinador;
+
+CREATE TABLE treinador (
+	idTreinador INT PRIMARY KEY AUTO_INCREMENT, 
+    nomeTreinador VARCHAR(45), 
+    telefoneTreinador VARCHAR(20), 
+    emailTreinador VARCHAR(50), 
+    fkTreinadorEx INT, FOREIGN KEY (fkTreinadorEx) REFERENCES treinador(idTreinador)
+)AUTO_INCREMENT = 10; 
+
+CREATE TABLE nadador (
+	idNadador INT AUTO_INCREMENT, 
+    nomeNadador VARCHAR(45), 
+    estadoOrigem VARCHAR(40),
+    dataNasc DATE, 
+    fkTreinador INT, FOREIGN KEY (fkTreinador) REFERENCES treinador (idTreinador),
+    PRIMARY KEY (idNadador, fkTreinador)
+)AUTO_INCREMENT = 100;
+
+
+INSERT INTO treinador VALUES 
+	(null, 'monica', '75361561253', 'momo@gmail.com', null) /*10*/;
+
+INSERT INTO treinador VALUES
+	(null, 'michael', '2342348923', 'mikezin@hotmail.com', 10), 
+    (null, 'paulnha', '983498223', 'ppokas@gmail.com', 10);
+    
+INSERT INTO nadador VALUES 
+	(null, 'Ermelindo', 'São Paulo', '1990-10-20',10),
+    (null, 'larisa', 'Minas Gerais', '1998-02-23',10),
+    (null, 'Garcia Jr.', 'São Paulo', '1999-09-12',11),
+    (null, 'kalista', 'Minas Gerais', '2001-04-12',11),
+    (null, 'barbara', 'Bahia', '2003-09-30', 12),
+    (null, 'paula', 'Santa Catarina', '2004-01-01', 12);
+
+
+SELECT * FROM treinador;
+SELECT * FROM nadador;
+
+SELECT * FROM treinador 
+	JOIN nadador ON idTreinador = fkTreinador;
+    
+SELECT * FROM treinador 
+	JOIN nadador ON idTreinador = fkTreinador 
+		WHERE nomeTreinador = 'monica';
+        
+SELECT * FROM treinador orientador
+	JOIN treinador orientado ON orientador.idTreinador = orientado.fkTreinadorEx;
+
+SELECT * FROM treinador orientador 
+	JOIN treinador orientado ON orientador.idTreinador = orientado.fkTreinadorEx
+		WHERE orientador.nomeTreinador LIKE 'monica';
+        
+SELECT * FROM treinador ex 
+	JOIN treinador nEx ON ex.idTreinador = nEx.fkTreinadorEx
+		JOIN nadador ON ex.idTreinador = nadador.fkTreinador;
+        
+SELECT * FROM treinador nEx 
+	JOIN treinador ex ON ex.idTreinador = nEx.fkTreinadorEx
+		JOIN nadador ON nEx.idTreinador = nadador.fkTreinador
+			WHERE nEx.nomeTreinador LIKE 'michael';
+
+        
 
